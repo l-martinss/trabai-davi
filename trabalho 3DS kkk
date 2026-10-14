@@ -1,0 +1,77 @@
+DROP DATABASE IF EXISTS barbeariaLucas;
+
+CREATE DATABASE barbeariaLucas;
+
+USE barbeariaLucas;
+
+CREATE TABLE barbeiros (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    numeroTelefone VARCHAR(15) NOT NULL,
+    nome VARCHAR(45) NOT NULL,
+    tempoExperiencia VARCHAR(4) NOT NULL
+);
+
+CREATE TABLE clientes (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(45) NOT NULL,
+    numeroTelefone VARCHAR(15) NOT NULL,
+    email VARCHAR(45) NOT NULL,
+    senha VARCHAR(45) NOT NULL,
+    idade INT NOT NULL,
+    endereco VARCHAR(100)
+);
+
+CREATE TABLE cortes (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    nomeCorte VARCHAR(60) NOT NULL,
+    tempoCorte TIME NOT NULL,
+    tipoCabelo VARCHAR(45) NOT NULL,
+    preco DECIMAL(10,2) NOT NULL
+);
+
+CREATE TABLE servicos (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    nomeServico VARCHAR(60) NOT NULL,
+    tempoServico TIME NOT NULL,
+    preco DECIMAL(10,2) NOT NULL
+);
+
+CREATE TABLE produtos (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    nomeProduto VARCHAR(60) NOT NULL,
+    preco DECIMAL(10,2) NOT NULL,
+    validade DATE,
+    marca VARCHAR(45)
+);
+
+CREATE TABLE agendamento (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    horario TIME,
+    data DATE,
+    confirmacao VARCHAR(45),
+    avaliacao FLOAT,
+    cancelamento VARCHAR(45),
+    id_cliente BIGINT NOT NULL,
+    id_barbeiro BIGINT NOT NULL,
+
+    CONSTRAINT fk_agendamento_cliente
+        FOREIGN KEY (id_cliente)
+        REFERENCES clientes(id),
+
+    CONSTRAINT fk_agendamento_barbeiro
+        FOREIGN KEY (id_barbeiro)
+        REFERENCES barbeiros(id)
+);
+
+CREATE TABLE pagamento (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    dataPagamento DATE,
+    valor DECIMAL(10,2),
+    formaPagamento VARCHAR(45),
+    status VARCHAR(20),
+    id_agendamento BIGINT NOT NULL,
+
+    CONSTRAINT fk_pagamento_agendamento
+        FOREIGN KEY (id_agendamento)
+        REFERENCES agendamento(id)
+);
